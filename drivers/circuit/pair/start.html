@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { margin: 0; padding: 4px 2px 16px; }
+    .field { margin: 14px 0; }
+    label.lbl { display:block; font-weight:600; margin-bottom:6px; font-size:14px; }
+    input[type=text] {
+      width:100%; padding:11px; border:1px solid #ccc; border-radius:8px;
+      box-sizing:border-box; font-size:15px; background:#fff;
+    }
+    .hint { color:#888; font-size:12.5px; margin-top:5px; }
+    button {
+      display:block; width:100%; box-sizing:border-box; text-align:center;
+      padding:13px; border:none; border-radius:8px; font-size:15px; font-weight:600;
+      cursor:pointer; font-family:inherit; margin-top:14px;
+      background:#22B573; color:#fff;
+    }
+    button:hover { background:#1c9c61; }
+    button.secondary { background:#fff; color:#1c9c61; border:1px solid #22B573; }
+    #summary { margin-top:14px; font-size:14px; }
+    #warn { color:#c07000; font-size:13px; margin-top:8px; }
+    #error { color:#c00; margin-top:12px; min-height:18px; font-size:13.5px; }
+    h3 { margin: 6px 0 2px; font-size:15px; }
+  </style>
+</head>
+<body>
+  <div id="panel">
+    <h3>Add panel circuits</h3>
+    <div class="hint">
+      Adds a switch for each circuit on your Smart Home Panel 3 (240V appliances
+      become one switch). Add the <b>Smart Home Panel 3</b> device first — the
+      switches run through it.
+    </div>
+    <div class="field">
+      <label class="lbl" for="sn">Panel serial number</label>
+      <input type="text" id="sn" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="HR63ZA…">
+      <div class="hint" id="snhint">Auto-detected from your Smart Home Panel 3 if it's already added.</div>
+    </div>
+    <button id="find" type="button">Find my circuits</button>
+    <div id="summary" hidden></div>
+    <div id="warn" hidden></div>
+    <button id="add" type="button" hidden>Add these switches</button>
+  </div>
+
+  <div id="error"></div>
+
+  <script type="application/javascript">
+    function $(id) { return document.getElementById(id); }
+    var pending = null;
+
+    (async function () {
+      try {
+        var panels = await Homey.emit('panels', {});
+        if (panels && panels.length === 1) {
+          $('sn').value = panels[0].sn;
+          $('snhint').textContent = 'Detected panel ' + panels[0].sn + '.';
+        }
+      } catch (e) {}
+    })();
+
+    $('find').addEventListener('click', async function () {
+      $('error').textContent = '';
+      var sn = $('sn').value.trim();
+      if (!sn) { $('error').textContent = 'Enter the panel serial number.'; return; }
+      try {
+        Homey.showLoadingOverlay();
+        var devices = await Homey.emit('list', { sn: sn });
+        Homey.hideLoadingOverlay();
+        if (!devices || !devices.length) { $('error').textContent = 'No circuits found.'; return; }
+        pending = devices;
+        var named = devices.filter(function (d) { return !/^Circuit ?\d+$/.test(d.name); }).length;
+        $('summary').hidden = false;
+        $('summary').textContent = 'Found ' + devices.length + ' switches — ' + named + ' named from EcoFlow.';
+        $('warn').hidden = (named >= 12);
+        if (named < 12) {
+          $('warn').textContent = 'Only a few are named — the panel is still loading labels. ' +
+            'Wait ~20 seconds and tap “Find my circuits” again for the full set.';
+        }
+        $('add').hidden = false;
+      } catch (e) {
+        Homey.hideLoadingOverlay();
+        $('error').textContent = (e && e.message) ? e.message : String(e);
+      }
+    });
+
+    $('add').addEventListener('click', async function () {
+      if (!pending) return;
+      $('error').textContent = '';
+      var added = 0;
+      Homey.showLoadingOverlay();
+      for (var i = 0; i < pending.length; i++) {
+        try { await Homey.createDevice(pending[i]); added++; }
+        catch (e) { /* already exists — skip */ }
+      }
+      Homey.hideLoadingOverlay();
+      $('error').style.color = '#0d652d';
+      $('error').textContent = 'Added ' + added + ' switch(es). Finishing…';
+      await Homey.done();
+    });
+
+    try { Homey.setTitle('Add panel circuits'); } catch (e) {}
+  </script>
+</body>
+</html>

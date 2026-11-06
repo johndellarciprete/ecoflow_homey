@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <!-- Driver icon: smart electrical panel (enclosure with rows of breakers). -->
+  <rect x="24" y="12" width="52" height="76" rx="5"/>
+  <rect x="33" y="24" width="12" height="9" rx="2" fill="#fff"/>
+  <rect x="55" y="24" width="12" height="9" rx="2" fill="#fff"/>
+  <rect x="33" y="39" width="12" height="9" rx="2" fill="#fff"/>
+  <rect x="55" y="39" width="12" height="9" rx="2" fill="#fff"/>
+  <rect x="33" y="54" width="12" height="9" rx="2" fill="#fff"/>
+  <rect x="55" y="54" width="12" height="9" rx="2" fill="#fff"/>
+  <rect x="33" y="69" width="34" height="7" rx="2" fill="#fff"/>
+</svg>

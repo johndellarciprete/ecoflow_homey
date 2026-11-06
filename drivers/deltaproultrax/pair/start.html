@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { margin: 0; padding: 4px 2px 16px; }
+    .field { margin: 14px 0; }
+    label.lbl { display:block; font-weight:600; margin-bottom:6px; font-size:14px; }
+    input[type=text], input[type=email], input[type=password], select {
+      width:100%; padding:11px; border:1px solid #ccc; border-radius:8px;
+      box-sizing:border-box; font-size:15px; background:#fff;
+    }
+    .hint { color:#888; font-size:12.5px; margin-top:5px; }
+    button {
+      display:block; width:100%; box-sizing:border-box; text-align:center;
+      padding:13px; border:none; border-radius:8px; font-size:15px; font-weight:600;
+      cursor:pointer; font-family:inherit; margin-top:14px;
+      background:#22B573; color:#fff;
+    }
+    button:hover { background:#1c9c61; }
+    #deviceList button { background:#fff; color:#1c9c61; border:1px solid #22B573; }
+    #deviceList button:hover { background:#eafaf1; }
+    #error { color:#c00; margin-top:12px; min-height:18px; font-size:13.5px; }
+    h3 { margin: 6px 0 2px; font-size:15px; }
+  </style>
+</head>
+<body>
+  <div id="credPanel">
+    <h3>Sign in to EcoFlow</h3>
+    <div class="hint">
+      Use the same email and password as your EcoFlow app. Your device must be set
+      up and online in that app. Discovery listens for a few seconds — keeping the
+      EcoFlow app open helps the device report.
+    </div>
+
+    <div class="field">
+      <label class="lbl" for="email">EcoFlow email</label>
+      <input type="email" id="email" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="you@example.com">
+    </div>
+    <div class="field">
+      <label class="lbl" for="password">EcoFlow password</label>
+      <input type="password" id="password" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Password">
+    </div>
+    <div class="field">
+      <label class="lbl" for="sn">Device serial number</label>
+      <input type="text" id="sn" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="e.g. P101ZA…">
+      <div class="hint">Find it in the EcoFlow app under the device's settings, or on the unit's label.</div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="region">Account region</label>
+      <select id="region">
+        <option value="us" selected>Global / United States</option>
+        <option value="eu">Europe</option>
+      </select>
+    </div>
+
+    <button id="go" type="button">Sign in &amp; find devices</button>
+  </div>
+
+  <div id="devicePanel" style="display:none">
+    <label class="lbl">Your EcoFlow devices</label>
+    <div class="hint" style="margin-bottom:4px">Tap a device to add it to Homey.</div>
+    <div id="deviceList"></div>
+  </div>
+
+  <div id="error"></div>
+
+  <script type="application/javascript">
+    function $(id) { return document.getElementById(id); }
+
+    async function showDevices() {
+      var devices = await Homey.emit('list_devices', {});
+      if (!devices || !devices.length) {
+        $('error').style.color = '#c00';
+        $('error').textContent = 'Signed in, but no matching devices came back.';
+        return;
+      }
+      var list = $('deviceList');
+      list.innerHTML = '';
+      devices.forEach(function (d) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = d.name || 'EcoFlow Device';
+        b.addEventListener('click', async function () {
+          $('error').style.color = '#c00';
+          $('error').textContent = '';
+          try {
+            Homey.showLoadingOverlay();
+            await Homey.createDevice(d);
+            Homey.hideLoadingOverlay();
+            $('error').style.color = '#0d652d';
+            $('error').textContent = 'Added ' + (d.name || 'device') + '. Finishing…';
+            await Homey.done();
+          } catch (e) {
+            Homey.hideLoadingOverlay();
+            $('error').textContent = (e && e.message) ? e.message : String(e);
+          }
+        });
+        list.appendChild(b);
+      });
+      $('credPanel').style.display = 'none';
+      $('devicePanel').style.display = 'block';
+    }
+
+    $('go').addEventListener('click', async function () {
+      $('error').style.color = '#c00';
+      $('error').textContent = '';
+      try {
+        Homey.showLoadingOverlay();
+        var res = await Homey.emit('login', {
+          email: $('email').value.trim(),
+          password: $('password').value,
+          sn: $('sn').value.trim(),
+          region: $('region').value
+        });
+        Homey.hideLoadingOverlay();
+        if (!res) {
+          $('error').textContent = 'No response from the app (the pair handler did not run).';
+          return;
+        }
+        $('error').style.color = '#0d652d';
+        $('error').textContent = 'Signed in. Found ' + res.count + ' device(s).';
+        await showDevices();
+      } catch (e) {
+        Homey.hideLoadingOverlay();
+        $('error').textContent = (e && e.message) ? e.message : String(e);
+      }
+    });
+
+    try { Homey.setTitle('Connect EcoFlow'); } catch (e) {}
+  </script>
+</body>
+</html>

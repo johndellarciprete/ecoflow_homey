@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <!-- Output power: arrow up out of a baseline -->
+  <rect x="4" y="19" width="16" height="2.2" rx="1"/>
+  <path d="M10.6 17V8.8H7.4L12 3l4.6 5.8h-3.2V17z"/>
+</svg>

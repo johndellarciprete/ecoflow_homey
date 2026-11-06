@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <!-- Circuit switch: a breaker toggle -->
+  <rect x="30" y="12" width="40" height="76" rx="8" fill="none" stroke="#000" stroke-width="6"/>
+  <rect x="42" y="24" width="16" height="26" rx="4"/>
+  <path stroke="#000" stroke-width="6" stroke-linecap="round" d="M50 50v26"/>
+</svg>

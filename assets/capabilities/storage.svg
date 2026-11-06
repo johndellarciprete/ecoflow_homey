@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <!-- Storage output: house with a battery bolt -->
+  <path fill="none" stroke="#000" stroke-width="2" stroke-linejoin="round" d="M4 11 12 4l8 7"/>
+  <path fill="none" stroke="#000" stroke-width="2" d="M6 11v9h12v-9"/>
+  <path d="M12.6 12l-2.8 3.6h2l-.6 2.6 2.8-3.6h-2z"/>
+</svg>

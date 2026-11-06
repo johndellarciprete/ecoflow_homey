@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <!-- App icon: whole-home power (house + energy bolt). Distinct from the
+       device drivers' icons (a power station and a breaker panel). -->
+  <path d="M50 12 L86 40 L86 44 L74 44 L74 84 L58 84 L58 60 L42 60 L42 84 L26 84 L26 44 L14 44 L14 40 Z"/>
+  <path d="M54 30 L38 56 L49 56 L45 74 L64 46 L52 46 Z" fill="#fff"/>
+</svg>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <!-- AC output: sine wave -->
+  <path fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" d="M3 12c2.5 0 2.5-5 4.5-5S9.5 17 12 17s2.5-10 4.5-10S19 12 21 12"/>
+</svg>

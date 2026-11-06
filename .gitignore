@@ -1,0 +1,27 @@
+# Homey build output & cross-compiled Python deps
+.homeybuild/
+python_packages/
+.homeycompose/
+__pycache__/
+*.pyc
+
+# Third-party reference material (downloaded from tolwi/hassio-ecoflow-cloud; not part of this app)
+reference/
+
+# Local diagnostic captures — contain device serial numbers + live telemetry
+scripts/ecoflow_devices.json
+scripts/ecoflow_quota_*.json
+scripts/ecoflow_certification.json
+scripts/ecoflow_probe_summary.json
+scripts/ecoflow_app_login.json
+scripts/ecoflow_app_cert.json
+scripts/ecoflow_app_topics.json
+scripts/ecoflow_app_msg_*
+scripts/ecoflow_set_*
+scripts/*.bin
+scripts/*.hex.txt
+ANALYSIS_decode.txt
+
+# OS cruft
+.DS_Store
+Thumbs.db

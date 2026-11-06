@@ -1,0 +1,314 @@
+{
+  "id": "com.dellarciprete.ecoflow",
+  "version": "0.1.0",
+  "compatibility": ">=13.0.0",
+  "sdk": 3,
+  "runtime": "python",
+  "pythonVersion": "3.13",
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "EcoFlow Whole-Home"
+  },
+  "description": {
+    "en": "Your whole-home power, in Homey."
+  },
+  "category": [
+    "energy"
+  ],
+  "permissions": [],
+  "author": {
+    "name": "John Dell'Arciprete"
+  },
+  "brandColor": "#22B573",
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "capabilities": {
+    "ecoflow_pow_in": {
+      "type": "number",
+      "title": { "en": "Input power" },
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/power-in.svg",
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": { "en": "W" },
+      "decimals": 0
+    },
+    "ecoflow_pow_out": {
+      "type": "number",
+      "title": { "en": "Output power" },
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/power-out.svg",
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": { "en": "W" },
+      "decimals": 0
+    },
+    "ecoflow_charge_state": {
+      "type": "enum",
+      "title": { "en": "Status" },
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/status.svg",
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "values": [
+        { "id": "idle", "title": { "en": "Idle" } },
+        { "id": "charging", "title": { "en": "Charging" } },
+        { "id": "discharging", "title": { "en": "Discharging" } }
+      ]
+    },
+    "ecoflow_time_remaining": {
+      "type": "string",
+      "title": { "en": "Time remaining" },
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/clock.svg",
+      "getable": true,
+      "setable": false,
+      "insights": false
+    },
+    "ecoflow_l1_voltage": {
+      "type": "number",
+      "title": { "en": "AC input L1 voltage" },
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/voltage.svg",
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": { "en": "V" },
+      "decimals": 1
+    },
+    "ecoflow_l2_voltage": {
+      "type": "number",
+      "title": { "en": "AC input L2 voltage" },
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/voltage.svg",
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": { "en": "V" },
+      "decimals": 1
+    },
+    "ecoflow_ac_out": {
+      "type": "number",
+      "title": { "en": "AC output power" },
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/ac.svg",
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": { "en": "W" },
+      "decimals": 0
+    },
+    "ecoflow_solar_in": {
+      "type": "number",
+      "title": { "en": "Solar input" },
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/solar.svg",
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": { "en": "W" },
+      "decimals": 0
+    },
+    "ecoflow_pack_soc": {
+      "type": "number",
+      "title": { "en": "Pack charge" },
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/pack-soc.svg",
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": { "en": "%" },
+      "min": 0,
+      "max": 100,
+      "decimals": 0
+    },
+    "ecoflow_pack_temp": {
+      "type": "number",
+      "title": { "en": "Pack temperature" },
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/pack-temp.svg",
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": { "en": "°C" },
+      "decimals": 0
+    },
+    "ecoflow_grid_pwr": {
+      "type": "number",
+      "title": { "en": "Grid power (W)" },
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/grid.svg",
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": { "en": "W" },
+      "decimals": 0
+    },
+    "ecoflow_grid_online": {
+      "type": "boolean",
+      "title": { "en": "Grid power" },
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/grid.svg",
+      "getable": true,
+      "setable": false,
+      "insights": true
+    },
+    "ecoflow_batt_pwr": {
+      "type": "number",
+      "title": { "en": "Storage output power" },
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/storage.svg",
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": { "en": "W" },
+      "decimals": 0
+    },
+    "ecoflow_circuit_pwr": {
+      "type": "number",
+      "title": { "en": "Circuit power" },
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/circuit.svg",
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "units": { "en": "W" },
+      "decimals": 0
+    }
+  },
+  "drivers": [
+    {
+      "id": "deltaproultrax",
+      "name": {
+        "en": "Delta Pro Ultra X"
+      },
+      "class": "other",
+      "capabilities": [
+        "measure_battery",
+        "measure_power",
+        "ecoflow_pow_in",
+        "ecoflow_pow_out",
+        "ecoflow_ac_out",
+        "ecoflow_solar_in",
+        "ecoflow_charge_state",
+        "ecoflow_time_remaining",
+        "measure_temperature",
+        "ecoflow_l1_voltage",
+        "ecoflow_l2_voltage"
+      ],
+      "energy": {
+        "batteries": [
+          "INTERNAL"
+        ]
+      },
+      "platforms": [
+        "local"
+      ],
+      "images": {
+        "small": "/drivers/deltaproultrax/assets/images/small.png",
+        "large": "/drivers/deltaproultrax/assets/images/large.png",
+        "xlarge": "/drivers/deltaproultrax/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "start"
+        }
+      ]
+    },
+    {
+      "id": "smartpanel3",
+      "name": {
+        "en": "Smart Home Panel 3"
+      },
+      "class": "other",
+      "capabilities": [
+        "measure_battery",
+        "measure_power",
+        "ecoflow_grid_online",
+        "ecoflow_grid_pwr",
+        "ecoflow_batt_pwr",
+        "ecoflow_charge_state",
+        "ecoflow_time_remaining",
+        "ecoflow_l1_voltage",
+        "ecoflow_l2_voltage"
+      ],
+      "energy": {
+        "batteries": [
+          "INTERNAL"
+        ]
+      },
+      "platforms": [
+        "local"
+      ],
+      "images": {
+        "small": "/drivers/smartpanel3/assets/images/small.png",
+        "large": "/drivers/smartpanel3/assets/images/large.png",
+        "xlarge": "/drivers/smartpanel3/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "start"
+        }
+      ]
+    },
+    {
+      "id": "circuit",
+      "name": {
+        "en": "Panel Circuit"
+      },
+      "class": "socket",
+      "capabilities": [
+        "onoff",
+        "measure_power"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "images": {
+        "small": "/drivers/circuit/assets/images/small.png",
+        "large": "/drivers/circuit/assets/images/large.png",
+        "xlarge": "/drivers/circuit/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "start"
+        }
+      ]
+    }
+  ],
+  "flow": {
+    "triggers": [
+      {
+        "id": "grid_power_off",
+        "title": { "en": "Grid power turned off" },
+        "titleFormatted": { "en": "Grid power turned off" },
+        "hint": { "en": "Fires when the panel loses grid power (outage)." },
+        "args": [
+          { "type": "device", "name": "device", "filter": "driver_id=smartpanel3" }
+        ]
+      },
+      {
+        "id": "grid_power_on",
+        "title": { "en": "Grid power turned on" },
+        "titleFormatted": { "en": "Grid power turned on" },
+        "hint": { "en": "Fires when grid power returns to the panel." },
+        "args": [
+          { "type": "device", "name": "device", "filter": "driver_id=smartpanel3" }
+        ]
+      }
+    ]
+  },
+  "pythonPackages": [
+    "aiohttp",
+    "certifi",
+    "paho-mqtt"
+  ]
+}
